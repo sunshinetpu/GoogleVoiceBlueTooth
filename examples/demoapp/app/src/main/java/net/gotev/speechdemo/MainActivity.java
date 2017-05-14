@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements SpeechDelegate {
         }
     }
 
+    //Click on the Microphone icon
     private void onButtonClick() {
         if (Speech.getInstance().isListening()) {
             Speech.getInstance().stopListening();
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements SpeechDelegate {
         }
     }
 
+    //Start listening to user.
     private void onRecordAudioPermissionGranted() {
         button.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
@@ -122,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements SpeechDelegate {
         //Log.d(getClass().getSimpleName(), "Speech recognition rms is now " + value +  "dB");
     }
 
+
+    //Result of google voice.
     @Override
     public void onSpeechResult(String result) {
 
@@ -131,12 +135,15 @@ public class MainActivity extends AppCompatActivity implements SpeechDelegate {
         text.setText(result);
 
         if (result.isEmpty()) {
+            // Don't know what the f*** you said
             Speech.getInstance().say(getString(R.string.repeat));
 
         } else {
+            // Got the word. Here you can process the result.
             Speech.getInstance().say(result);
 
             try {
+                //Send the raw string to other device via bluetooth.
                 write(result);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -192,6 +199,8 @@ public class MainActivity extends AppCompatActivity implements SpeechDelegate {
     //For bluetooth connection
     private OutputStream mOutputStream;
     private BluetoothSocket mSocket;
+
+    //Initialize bluetooth connection.
     private void init() throws IOException {
         BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
         if (blueAdapter != null) {
@@ -215,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements SpeechDelegate {
         }
     }
 
+    //Send data via bluetooth
     public void write(String s) throws IOException {
         mOutputStream.write(s.getBytes());
     }
